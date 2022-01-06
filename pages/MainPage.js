@@ -13,26 +13,50 @@ export default function MainPage() {
   //모두 다 useState가 선물해줌
   //useState()안에 전달되는 값은 state 초기값
   const [state,setState] = useState([])
-	
+  const [cateState,setCateState] = useState([])
+
 
 	//하단의 return 문이 실행되어 화면이 그려진다음 실행되는 useEffect 함수
   //내부에서 data.json으로 부터 가져온 데이터를 state 상태에 담고 있음
   const [ready,setReady] = useState(true)
 
   useEffect(()=>{
+    //console.log(data.tip[1].category);
 	   
 		//뒤의 1000 숫자는 1초를 뜻함
     //1초 뒤에 실행되는 코드들이 담겨 있는 함수
     setTimeout(()=>{
-        setState(data)
+        setState(data.tip)
+        setCateState(data.tip)
         setReady(false)
     },1000)
  
     
   },[])
 
+  const category = (cate) => {
+    if(cate == "전체보기"){
+        //전체보기면 원래 꿀팁 데이터를 담고 있는 상태값으로 다시 초기화
+        setCateState(state)
+    }else{
+      console.log('전체보기가 아닐경우');
+      //debugger;
+        setCateState(state.filter((d)=>{
+         // console.log(d);
+          //debugger;
+            return d.category == cate;
+            
+        }))
+        //console.log([cateState]); //아직 cateState에는 전체 값만 들어있다.
+        
+        
+    }
+    console.log([cateState]); // 여기서 cateState 값이 변경되었다.
+    //console.log([setCateState]);
+}
+
   //data.json 데이터는 state에 담기므로 상태에서 꺼내옴
-  let tip = state.tip;
+  // let tip = state.tip;
   let todayWeather = 10 + 17;
   let todayCondition = "흐림"
   //return 구문 밖에서는 슬래시 두개 방식으로 주석
@@ -45,15 +69,16 @@ export default function MainPage() {
 			 <Text style={styles.weather}>오늘의 날씨: {todayWeather + '°C ' + todayCondition} </Text>
       <Image style={styles.mainImage} source={{uri:main}}/>
       <ScrollView style={styles.middleContainer} horizontal indicatorStyle={"white"}>
-        <TouchableOpacity style={styles.middleButton01}><Text style={styles.middleButtonText}>생활</Text></TouchableOpacity>
-        <TouchableOpacity style={styles.middleButton02}><Text style={styles.middleButtonText}>재테크</Text></TouchableOpacity>
-        <TouchableOpacity style={styles.middleButton03}><Text style={styles.middleButtonText}>반려견</Text></TouchableOpacity>
-        <TouchableOpacity style={styles.middleButton04}><Text style={styles.middleButtonText}>꿀팁 찜</Text></TouchableOpacity>
+      <TouchableOpacity style={styles.middleButtonAll} onPress={()=>{category('전체보기')}}><Text style={styles.middleButtonTextAll}>전체보기</Text></TouchableOpacity>
+        <TouchableOpacity style={styles.middleButton01} onPress={()=>{category('생활')}}><Text style={styles.middleButtonText}>생활</Text></TouchableOpacity>
+        <TouchableOpacity style={styles.middleButton02} onPress={()=>{category('재테크')}}><Text style={styles.middleButtonText}>재테크</Text></TouchableOpacity>
+        <TouchableOpacity style={styles.middleButton03} onPress={()=>{category('반려견')}}><Text style={styles.middleButtonText}>반려견</Text></TouchableOpacity>
+        <TouchableOpacity style={styles.middleButton04} onPress={()=>{category('꿀팁 찜')}}><Text style={styles.middleButtonText}>꿀팁 찜</Text></TouchableOpacity>
       </ScrollView>
       <View style={styles.cardContainer}>
          {/* 하나의 카드 영역을 나타내는 View */}
          {
-          tip.map((content,i)=>{
+          cateState.map((content,i)=>{
             return (<Card content={content} key={i}/>)
           })
         }
@@ -78,7 +103,7 @@ const styles = StyleSheet.create({
     //왼쪽 공간으로 부터 이격
     marginLeft:20
   },
-  weather:{
+weather:{
     alignSelf:"flex-end",
     paddingRight:20
   },
@@ -98,6 +123,15 @@ const styles = StyleSheet.create({
     marginTop:20,
     marginLeft:10,
     height:60
+  },
+  middleButtonAll: {
+    width:100,
+    height:50,
+    padding:15,
+    backgroundColor:"#20b2aa",
+    borderColor:"deeppink",
+    borderRadius:15,
+    margin:7
   },
   middleButton01: {
     width:100,
@@ -124,12 +158,6 @@ const styles = StyleSheet.create({
     borderRadius:15,
     margin:7
   },
-  middleButtonText: {
-    color:"#fff",
-    fontWeight:"700",
-    //텍스트의 현재 위치에서의 정렬 
-    textAlign:"center"
-  },
   middleButton04: {
     width:100,
     height:50,
@@ -138,42 +166,21 @@ const styles = StyleSheet.create({
     borderRadius:15,
     margin:7
   },
+  middleButtonText: {
+    color:"#fff",
+    fontWeight:"700",
+    //텍스트의 현재 위치에서의 정렬 
+    textAlign:"center"
+  },
+  middleButtonTextAll: {
+    color:"#fff",
+    fontWeight:"700",
+    //텍스트의 현재 위치에서의 정렬 
+    textAlign:"center"
+  },
   cardContainer: {
     marginTop:10,
     marginLeft:10
-  },
-  card:{
-    flex:1,
-    //컨텐츠들을 가로로 나열
-    //세로로 나열은 column <- 디폴트 값임 
-    flexDirection:"row",
-    margin:10,
-    borderBottomWidth:0.5,
-    borderBottomColor:"#eee",
-    paddingBottom:10
-
-  },
-  cardImage: {
-    flex:1,
-    width:100,
-    height:100,
-    borderRadius:10,
-  },
-  cardText: {
-    flex:2,
-    flexDirection:"column",
-    marginLeft:10,
-  },
-  cardTitle: {
-    fontSize:20,
-    fontWeight:"700"
-  },
-  cardDesc: {
-    fontSize:15
-  },
-  cardDate: {
-    fontSize:10,
-    color:"#A6A6A6",
   },
 
 

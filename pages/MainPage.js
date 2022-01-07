@@ -5,6 +5,7 @@ const main = 'https://storage.googleapis.com/sparta-image.appspot.com/lecture/ma
 import data from '../data.json';
 import Card from '../Components/Cards';
 import Loading from '../Components/Loading';
+import { StatusBar } from 'expo-status-bar';
 export default function MainPage() {
   //useState 사용법
 	//[state,setState] 에서 state는 이 컴포넌트에서 관리될 상태 데이터를 담고 있는 변수
@@ -15,13 +16,11 @@ export default function MainPage() {
   const [state,setState] = useState([])
   const [cateState,setCateState] = useState([])
 
-
 	//하단의 return 문이 실행되어 화면이 그려진다음 실행되는 useEffect 함수
   //내부에서 data.json으로 부터 가져온 데이터를 state 상태에 담고 있음
   const [ready,setReady] = useState(true)
 
   useEffect(()=>{
-    //console.log(data.tip[1].category);
 	   
 		//뒤의 1000 숫자는 1초를 뜻함
     //1초 뒤에 실행되는 코드들이 담겨 있는 함수
@@ -39,20 +38,10 @@ export default function MainPage() {
         //전체보기면 원래 꿀팁 데이터를 담고 있는 상태값으로 다시 초기화
         setCateState(state)
     }else{
-      console.log('전체보기가 아닐경우');
-      //debugger;
         setCateState(state.filter((d)=>{
-         // console.log(d);
-          //debugger;
-            return d.category == cate;
-            
+            return d.category == cate
         }))
-        //console.log([cateState]); //아직 cateState에는 전체 값만 들어있다.
-        
-        
     }
-    console.log([cateState]); // 여기서 cateState 값이 변경되었다.
-    //console.log([setCateState]);
 }
 
   //data.json 데이터는 state에 담기므로 상태에서 꺼내옴
@@ -65,6 +54,7 @@ export default function MainPage() {
       return 구문 안에서는 {슬래시 + * 방식으로 주석
     */
     <ScrollView style={styles.container}>
+      <StatusBar style="light" />
       <Text style={styles.title}>나만의 꿀팁</Text>
 			 <Text style={styles.weather}>오늘의 날씨: {todayWeather + '°C ' + todayCondition} </Text>
       <Image style={styles.mainImage} source={{uri:main}}/>

@@ -1,10 +1,8 @@
 import React,{useState,useEffect} from 'react';
-import { StyleSheet, Text, View, Image, ScrollView,TouchableOpacity,Alert } from 'react-native';
+import { StyleSheet, Text, View, Image, ScrollView,TouchableOpacity,Alert,Share } from 'react-native';
 
 export default function DetailPage({navigation,route}) {
-		
-		//초기 컴포넌트의 상태값을 설정
-		//state, setState 뿐 아니라 이름을 마음대로 지정할 수 있음!
+
     const [tip, setTip] = useState({
         "idx":9,
         "category":"재테크",
@@ -16,26 +14,25 @@ export default function DetailPage({navigation,route}) {
     
     useEffect(()=>{
         console.log(route)
-
-	//Card.js에서 navigation.navigate 함수를 쓸때 두번째 인자로 content를 넘겨줬죠?
-  //content는 딕셔너리 그 자체였으므로 route.params에 고대~로 남겨옵니다.
-  //즉, route.params 는 content죠!
-
         navigation.setOptions({
-						//setOptions로 페이지 타이틀도 지정 가능하고
             title:route.params.title,
-						//StackNavigator에서 작성했던 옵션을 다시 수정할 수도 있습니다. 
             headerStyle: {
                 backgroundColor: '#000',
                 shadowColor: "#000",
             },
             headerTintColor: "#fff",
         })
-        setTip(route.params) // 처음에 정해놓은 setTip 의 객체를 재정의한다. 그리고 재정의한 데이터를 아래 컴포넌트에서 가져갈 수 있도록 한다.
+        setTip(route.params)
     },[])
 
     const popup = () => {
         Alert.alert("팝업!!")
+    }
+
+    const share = () => {
+        Share.share({
+            message:`${tip.title} \n\n ${tip.desc} \n\n ${tip.image}`,
+        });
     }
     return ( 
         // ScrollView에서의 flex 숫자는 의미가 없습니다. 정확히 보여지는 화면을 몇등분 하지 않고
@@ -46,7 +43,11 @@ export default function DetailPage({navigation,route}) {
             <View style={styles.textContainer}>
                 <Text style={styles.title}>{tip.title}</Text>
                 <Text style={styles.desc}>{tip.desc}</Text>
-                <TouchableOpacity style={styles.button} onPress={()=>popup()}><Text style={styles.buttonText}>팁 찜하기</Text></TouchableOpacity>
+                <View style={styles.buttonGroup}>
+                    <TouchableOpacity style={styles.button} onPress={()=>popup()}><Text style={styles.buttonText}>팁 찜하기</Text></TouchableOpacity>
+                    <TouchableOpacity style={styles.button} onPress={()=>share()}><Text style={styles.buttonText}>팁 공유하기</Text></TouchableOpacity>
+                </View>
+                
             </View>
             
         </ScrollView>
@@ -78,9 +79,14 @@ const styles = StyleSheet.create({
         marginTop:10,
         color:"#eee"
     },
+    buttonGroup: {
+        flexDirection:"row",
+    },
     button:{
         width:100,
         marginTop:20,
+        marginRight:10,
+        marginLeft:10,
         padding:10,
         borderWidth:1,
         borderColor:'deeppink',

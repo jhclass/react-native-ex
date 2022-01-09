@@ -1,5 +1,6 @@
 import React,{useState,useEffect} from 'react';
 import { StyleSheet, Text, View, Image, ScrollView,TouchableOpacity,Alert,Share } from 'react-native';
+import * as Linking from 'expo-linking';
 
 export default function DetailPage({navigation,route}) {
 
@@ -34,6 +35,10 @@ export default function DetailPage({navigation,route}) {
             message:`${tip.title} \n\n ${tip.desc} \n\n ${tip.image}`,
         });
     }
+
+    const link = () => {
+        Linking.openURL("https://spartacodingclub.kr")
+    }
     return ( 
         // ScrollView에서의 flex 숫자는 의미가 없습니다. 정확히 보여지는 화면을 몇등분 하지 않고
         // 화면에 넣은 컨텐츠를 모두 보여주려 스크롤 기능이 존재하기 때문입니다. 
@@ -46,6 +51,7 @@ export default function DetailPage({navigation,route}) {
                 <View style={styles.buttonGroup}>
                     <TouchableOpacity style={styles.button} onPress={()=>popup()}><Text style={styles.buttonText}>팁 찜하기</Text></TouchableOpacity>
                     <TouchableOpacity style={styles.button} onPress={()=>share()}><Text style={styles.buttonText}>팁 공유하기</Text></TouchableOpacity>
+                    <TouchableOpacity style={styles.button} onPress={()=>link()}><Text style={styles.buttonText}>외부 링크</Text></TouchableOpacity>
                 </View>
                 
             </View>
@@ -83,7 +89,7 @@ const styles = StyleSheet.create({
         flexDirection:"row",
     },
     button:{
-        width:100,
+        width:90,
         marginTop:20,
         marginRight:10,
         marginLeft:10,

@@ -1,13 +1,31 @@
-import React from 'react'
-import {View,Text,SafeAreaView,StyleSheet,ScrollView,TouchableOpacity,Image} from 'react-native';
+import React,{useState,useEffect} from 'react';
+import {View,Text,SafeAreaView,StyleSheet,ScrollView,TouchableOpacity,Image,} from 'react-native';
 import { borderLeftColor } from 'react-native/Libraries/Components/View/ReactNativeStyleAttributes';
 //import { TouchableOpacity } from 'react-native-web';
+import * as Linking from 'expo-linking';
+
 
 const imageUrl = "https://storage.googleapis.com/sparta-image.appspot.com/lecture/about.png";
 let hText = `Hi! 스파르타코딩 앱개발
 반에 오신것을 환영합니다`;
-export default function AboutPage(){
+
+
+export default function AboutPage({navigation,route}){
   // return (<MainPage/>)
+
+  useEffect(()=>{
+    console.log(route)
+    navigation.setOptions({
+      title:'소개페이지'
+  })  
+   
+   // setReady(false)
+
+},[])
+
+const link = () => {
+    Linking.openURL("https://www.instagram.com/yjh.0709/")
+}
   return(
       
     <SafeAreaView>
@@ -23,7 +41,7 @@ export default function AboutPage(){
                 <View style={styles.textWrap}>
                     <View><Text style={styles.title}>많은 내용을 간결하게 담아내려 노력했습니다!</Text></View>
                     <View><Text style={styles.desc}>꼭 완주 하셔서 꼭 여러분것으로 만들어가시길 바랍니다!</Text></View>
-                    <TouchableOpacity style={styles.buttonWrap}><Text style={styles.button1}>여러분의 인스타계정</Text></TouchableOpacity>
+                    <TouchableOpacity style={styles.buttonWrap} onPress={()=>link()}><Text style={styles.button1}>여러분의 인스타계정</Text></TouchableOpacity>
                 </View>
             </View>
 

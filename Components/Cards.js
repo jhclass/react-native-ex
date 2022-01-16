@@ -5,7 +5,7 @@ import {View, Image, Text, StyleSheet,TouchableOpacity} from 'react-native'
 export default function Card({content,navigation}){
     return(
         //카드 자체가 버튼역할로써 누르게되면 상세페이지로 넘어가게끔 TouchableOpacity를 사용
-        <TouchableOpacity style={styles.card} onPress={()=>{navigation.navigate('DetailPage',content)}}>
+        <TouchableOpacity style={styles.card} onPress={()=>{navigation.navigate('DetailPage',{idx:content.idx})}}>
             <Image style={styles.cardImage} source={{uri:content.image}}/>
             <View style={styles.cardText}>
                 <Text style={styles.cardTitle} numberOfLines={1}>{content.title}</Text>

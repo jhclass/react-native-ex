@@ -1,6 +1,7 @@
 import React,{useState,useEffect} from 'react';
 import { StyleSheet, Text, View, Image, ScrollView,TouchableOpacity,Alert,Share } from 'react-native';
 import * as Linking from 'expo-linking';
+import {firebase_db} from "../firebaseConfig"
 
 export default function DetailPage({navigation,route}) {
 
@@ -23,7 +24,12 @@ export default function DetailPage({navigation,route}) {
             },
             headerTintColor: "#fff",
         })
-        setTip(route.params)
+        //넘어온 데이터는 route.params에 들어 있습니다.
+        const { idx } = route.params;
+        firebase_db.ref('/tip/'+idx).once('value').then((snapshot) => {
+            let tip = snapshot.val();
+            setTip(tip)
+        });
     },[])
 
     const popup = () => {
